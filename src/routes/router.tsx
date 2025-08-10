@@ -4,6 +4,8 @@ import MainLayout from "@/layout/main-layout";
 import Home from "@/pages/home/home";
 import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
+import Shop from "@/pages/shop/shop";
+import ProductDetail from "@/pages/product-detail/product-detail";
 
 export const Routes = [
     {
@@ -13,6 +15,14 @@ export const Routes = [
             {
                 index: true,
                 element: <Home/>
+            },
+            {
+                path: "/shop",
+                element: <Shop/>
+            },
+            {
+                path: "/products/:slug",
+                element: <ProductDetail/>
             }
         ]
     },
