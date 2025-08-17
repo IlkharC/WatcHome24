@@ -1,4 +1,6 @@
 import ActionGroup from "@/components/action-group/action-group";
+import CartSidebar from "@/components/cart-sidebar/cart-sidebar";
+import { useCartSidebarStore } from "@/store/useCartSidebarStore";
 import { Heart, Search, ShoppingCart, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -12,6 +14,8 @@ export default function Navbar({ isAuthenticated, onLogout }: NavbarProps)
 {
     const [ scrolled, setScrolled ] = useState(false)
     const [ dropdown, setDropdown ] = useState(false)
+
+    const { open } = useCartSidebarStore()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -28,6 +32,9 @@ export default function Navbar({ isAuthenticated, onLogout }: NavbarProps)
     }
 
     return (
+        <>
+        <CartSidebar/>
+
         <header className={`site-header ${scrolled ? "scrolled" : ""}`}>
             <div className="container">
                 <div className="navbar-wrapper">
@@ -93,7 +100,7 @@ export default function Navbar({ isAuthenticated, onLogout }: NavbarProps)
                         </div>
 
                         {/* Cart */}
-                        <div className="navbar-cart">
+                        <div className="navbar-cart" onClick={open}>
                             <ShoppingCart/>
                         </div>
 
@@ -102,5 +109,6 @@ export default function Navbar({ isAuthenticated, onLogout }: NavbarProps)
                 </div>
             </div>
         </header>
+        </>
     );
 }

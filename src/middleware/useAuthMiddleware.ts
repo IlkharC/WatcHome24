@@ -1,9 +1,9 @@
-import { useAuth } from "@/store/use-auth";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function useAuthMiddleware() {
-    const { login, logout } = useAuth()
+    const { login, logout } = useAuthStore()
     const location = useLocation()
     const navigate = useNavigate()
 

@@ -1,4 +1,4 @@
-import { useAuth } from "@/store/use-auth";
+import { useAuthStore } from "@/store/useAuthStore";
 import type { User } from "@/types/user";
 import { useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import LoginForm from "./components/login-form";
 export default function Login()
 {
     const navigate = useNavigate()
-    const { login } = useAuth()
+    const { login } = useAuthStore()
 
     const [ formData, setFormData ] = useState({
         email: "",

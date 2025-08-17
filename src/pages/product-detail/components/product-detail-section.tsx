@@ -1,6 +1,8 @@
-import type { Product } from "@/types/product";
+import { useCartStore } from "@/store/useCartStore";
+import type { Product, ProductVariant } from "@/types/product";
 import { Scale } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface ProductDetailSectionProps {
     product: Product;
@@ -8,22 +10,71 @@ interface ProductDetailSectionProps {
 
 export default function ProductDetailSection({ product }: ProductDetailSectionProps)
 {
-    const [ quantity, setQuantity ] = useState(1)
+    const { addItem } = useCartStore()
+
+    const [ searchParams, setSearchParams ] = useSearchParams()
+
+    const initialSku = searchParams.get("variant")
+    const initialVariant = 
+        product.variants.find((v) => v.sku === initialSku) ?? product.variants[0];
+    
+    const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(initialVariant);
+    const [primaryImage, setPrimaryImage] = useState<string>(
+        initialVariant?.gallery?.[0] ?? ""
+    );
+    const [quantity, setQuantity] = useState(1);
+
+    const [ selectedColor, setSelectedColor ] = useState(selectedVariant.colorName)
+
+    useEffect(() => {
+        const variant = product.variants.find((p) =>
+            p.colorName === selectedColor
+        )
+
+        if (variant) {
+            setSelectedVariant(variant)
+            setPrimaryImage(variant.gallery?.[0] ?? "")
+            setSearchParams({ variant: variant.sku })
+        }
+    }, [selectedColor])
+
+    const handleIncreaseQuantity = () => setQuantity((q) => q + 1);
+    const handleDecreaseQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : q));
+    const handleSelectImage = (index: number) => {
+        setPrimaryImage(selectedVariant.gallery[index] ?? primaryImage);
+    };
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        addItem(product, {
+            variant: selectedVariant,
+            quantity
+        });
+    };
+
+    const colors = product.variants.map((v) => v.colorName)
 
     return (
         <div className="product-detail-section">
             <div className="product-detail-main">
                 <div className="product-detail-left">
                     <div className="product-images">
-                        {product.variants[0]?.gallery && product.variants[0]?.gallery.length > 0 && (
+                        {selectedVariant?.gallery && selectedVariant?.gallery.length > 0 && (
                             <div className="gallery-images">
-                                {product.variants[0].gallery.map((image, index) => (
-                                    <img key={image} src={image} alt={`${product.name} gallery ${index + 1}`} />
+                                {selectedVariant.gallery.map((image, index) => (
+                                    <img 
+                                        key={image} 
+                                        onClick={() => handleSelectImage(index)}
+                                        src={image} 
+                                        alt={`${product.name} gallery ${index + 1}`} 
+                                    />
                                 ))}
                             </div>
                         )}
-                        <div className="main-image">
-                            <img src={product.variants[0]?.gallery?.[0]} alt={product.name} />
+                        <div className="primary-image">
+                            <img src={primaryImage} alt={product.name} />
                         </div>
                     </div>
                 </div>
@@ -36,11 +87,12 @@ export default function ProductDetailSection({ product }: ProductDetailSectionPr
                         <div className="product-detail-options-group">
                             <p>Colors</p>
                             <div className="product-detail-options">
-                                {product.variants.map((variant) => (
+                                {colors.map((color) => (
                                     <button
-                                        key={variant.sku}
+                                        key={color}
                                         style={{ 
-                                            backgroundColor: variant.colorCode,
+                                            backgroundColor: product.variants.find(
+                                                (v) => v.colorName === color)?.colorCode,
                                             width: '30px',
                                             height: '30px',
                                             borderRadius: '50%',
@@ -48,8 +100,11 @@ export default function ProductDetailSection({ product }: ProductDetailSectionPr
                                             marginRight: '8px',
                                             cursor: 'pointer'
                                         }}
-                                        className="color-option"
-                                        title={variant.colorName}
+                                        className={`color-option ${
+                                            color === selectedColor ? "selected" : "" 
+                                        }`}
+                                        onClick={() => setSelectedColor(color)}
+                                        title={color}
                                     />
                                 ))}
                             </div>
@@ -57,11 +112,16 @@ export default function ProductDetailSection({ product }: ProductDetailSectionPr
 
                         <div className="product-detail-actions">
                             <div className="product-detail-quantity-box">
-                                <button className="product-detail-decrease">-</button>
+                                <button className="product-detail-decrease" onClick={handleDecreaseQuantity}>-</button>
                                 <span className="product-detail-quantity">{quantity}</span>
-                                <button className="product-detail-increase">+</button>
+                                <button className="product-detail-increase" onClick={handleIncreaseQuantity}>+</button>
                             </div>
-                            <button className="product-detail-add-to-cart">Add to Cart</button>
+                            <button 
+                                className="product-detail-add-to-cart"
+                                onClick={handleAddToCart}
+                            >
+                                Add to Cart
+                            </button>
                             <button className="product-detail-compare">
                                 <Scale/>
                             </button>

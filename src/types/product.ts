@@ -3,7 +3,7 @@ export interface ProductVariant {
     colorName: string;
     colorCode: string;
     image: string;
-    gallery?: string[];
+    gallery: string[];
     stock: number;
 }
 
@@ -16,12 +16,11 @@ export interface Product {
     price: number;
 
     brand?: string;
-    gender?: string;
+    gender?: "Men" | "Women" | "Unisex";
     mechanismType?: string;
     strapMaterial?: string;
     waterResistance?: boolean;
 
-    sku?: string;
     category?: string;
     tags?: string[];
 
