@@ -8,7 +8,7 @@ This project is being developed using React, Vite, and TypeScript.
 - React
 - Vite
 - TypeScript
-- Zustand (coming soon)
+- Zustand
 - Tailwind CSS
 
 ## 🚀 Installation
