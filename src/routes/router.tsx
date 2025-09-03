@@ -6,6 +6,7 @@ import Login from "@/pages/auth/login";
 import Register from "@/pages/auth/register";
 import Shop from "@/pages/shop/shop";
 import ProductDetail from "@/pages/product-detail/product-detail";
+import Cart from "@/pages/cart/cart";
 
 export const Routes = [
     {
@@ -23,6 +24,10 @@ export const Routes = [
             {
                 path: "/products/:slug",
                 element: <ProductDetail/>
+            },
+            {
+                path: "/cart",
+                element: <Cart/>
             }
         ]
     },

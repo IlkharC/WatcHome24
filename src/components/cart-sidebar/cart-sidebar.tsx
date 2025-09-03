@@ -32,17 +32,17 @@ export default function CartSidebar()
                     </button>
                 </div>
 
-                <div className="cart-content">
+                <div className="sidebar-cart-content">
                     {cart.length > 0 ? (
                         <>
-                            <div className="cart-products-list">
+                            <div className="sidebar-cart-products-list">
                                 {cart.map((item) => (
                                     <SidebarCartItem key={item.id} item={item}/>
                                 ))}
                             </div>
 
-                            <div className="cart-footer">
-                                <div className="cart-products-subtotal">
+                            <div className="sidebar-cart-footer">
+                                <div className="sidebar-cart-products-subtotal">
                                     <span>
                                         {cart.reduce(
                                             (total, item) => total + (item.product.price * item.quantity),

@@ -12,16 +12,16 @@ export default function SidebarCartItem({ item }: SidebarCartItemProps)
     
     return (
         <div className="sidebar-cart-item">
-            <div className="sidebar-cart-item-image">
+            {/* <div className="sidebar-cart-item-image">
                 <img src={item.variant.image} alt={item.product.name} />
-            </div>
+            </div> */} 
 
             <div className="sidebar-cart-item-details">
                 <p className="sidebar-cart-item-name">{item.product.name}</p>
                 <div className="sidebar-cart-item-meta">
                     <span className="sidebar-cart-item-quantity">{item.quantity}x </span>
                     <span className="sidebar-cart-item-price">
-                        {item.product.price.toLocaleString("id-ID")} ₼
+                        {item.product.price.toLocaleString("id-ID")} $
                     </span>
                 </div>
             </div>
