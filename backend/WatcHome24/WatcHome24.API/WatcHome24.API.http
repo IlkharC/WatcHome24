@@ -1,0 +1,6 @@
+@WatcHome24.API_HostAddress = http://localhost:5236
+
+GET {{WatcHome24.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
